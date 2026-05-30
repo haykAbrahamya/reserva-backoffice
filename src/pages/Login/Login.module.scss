@@ -126,8 +126,8 @@
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(20,17,14,0.045) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(20,17,14,0.045) 1px, transparent 1px);
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
   background-size: 40px 40px;
   pointer-events: none;
 }

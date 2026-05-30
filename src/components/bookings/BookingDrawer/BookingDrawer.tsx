@@ -135,7 +135,7 @@ export function BookingDrawer({ bookingId, onClose, sheet }: Props) {
   return (
     <>
       <div
-        style={{ position: 'fixed', inset: 0, zIndex: 999, background: 'rgba(20,17,14,.28)', backdropFilter: 'blur(2px)', animation: 'fade-in .18s ease both' }}
+        style={{ position: 'fixed', inset: 0, zIndex: 999, background: 'var(--scrim-soft)', backdropFilter: 'blur(2px)', animation: 'fade-in .18s ease both' }}
         onClick={onClose}
       />
       <div style={{
@@ -143,7 +143,8 @@ export function BookingDrawer({ bookingId, onClose, sheet }: Props) {
         width: 'min(420px, 92vw)',
         background: 'var(--bg-1)', borderLeft: '1px solid var(--line-1)',
         boxShadow: 'var(--shadow-3)', display: 'flex', flexDirection: 'column',
-        animation: 'slide-in-r .28s cubic-bezier(.2,.7,.1,1) both',
+        animation: 'drawer-slide-in .34s cubic-bezier(.22,.86,.23,1) both',
+        willChange: 'transform',
         overflow: 'hidden',
       }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12, padding: '16px 22px', borderBottom: '1px solid var(--line-1)', flexShrink: 0 }}>

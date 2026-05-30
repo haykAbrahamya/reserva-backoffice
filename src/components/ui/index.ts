@@ -1,5 +1,6 @@
 export { Button } from './Button/Button'
 export { DatePicker } from './DatePicker/DatePicker'
+export { TimePicker } from './TimePicker/TimePicker'
 export { Input, Textarea } from './Input/Input'
 export { Badge, BookingBadge } from './Badge/Badge'
 export { Card, CardHeader, CardTitle } from './Card/Card'

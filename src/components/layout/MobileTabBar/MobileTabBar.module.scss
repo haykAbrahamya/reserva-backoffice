@@ -1,5 +1,13 @@
 @use '../../../styles/variables' as *;
 
+/* Dedicated keyframes (uniquely named, :global so they aren't hashed) */
+:global {
+  @keyframes more-scrim-in  { from { opacity: 0 }                  to { opacity: 1 } }
+  @keyframes more-scrim-out { from { opacity: 1 }                  to { opacity: 0 } }
+  @keyframes more-sheet-in  { from { transform: translateY(100%) } to { transform: translateY(0) } }
+  @keyframes more-sheet-out { from { transform: translateY(0) }    to { transform: translateY(100%) } }
+}
+
 /* Hidden on desktop */
 @media (min-width: 769px) {
   .tabbar { display: none !important; }
@@ -22,7 +30,7 @@
 }
 
 [data-theme="dark"] .tabbar {
-  background: rgba(15, 14, 12, 0.88);
+  background: rgba(18, 17, 16, 0.9);
 }
 
 .tab {
@@ -80,9 +88,10 @@
 .moreScrim {
   position: fixed;
   inset: 0;
-  background: rgba(20,17,14,0.42);
+  background: var(--scrim);
   z-index: 40;
-  animation: fade-in 0.2s ease both;
+  animation: more-scrim-in 0.22s ease both;
+  &.closing { animation: more-scrim-out 0.26s ease both; }
 }
 
 .moreSheet {
@@ -95,8 +104,10 @@
   box-shadow: 0 -8px 40px rgba(20,17,14,0.18);
   z-index: 41;
   padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
-  animation: sheet-in 0.34s cubic-bezier(0.22, 0.86, 0.23, 1) both;
+  will-change: transform;
+  animation: more-sheet-in 0.34s cubic-bezier(0.22, 0.86, 0.23, 1) both;
   overflow: hidden;
+  &.closing { animation: more-sheet-out 0.28s cubic-bezier(0.4, 0, 1, 1) both; }
 }
 
 .sheetGrab {

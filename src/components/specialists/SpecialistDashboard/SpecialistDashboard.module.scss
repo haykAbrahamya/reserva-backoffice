@@ -16,7 +16,7 @@
 .scrim {
   position: fixed;
   inset: 0;
-  background: rgba(20,17,14,0.32);
+  background: var(--scrim);
   backdrop-filter: blur(3px);
   z-index: 500;
   will-change: opacity;
@@ -106,8 +106,8 @@
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(20,17,14,0.045) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(20,17,14,0.045) 1px, transparent 1px);
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
   background-size: 28px 28px;
   pointer-events: none;
 }

@@ -48,7 +48,7 @@
 .sheetScrim {
   position: fixed;
   inset: 0;
-  background: rgba(20,17,14,0.42);
+  background: var(--scrim);
   z-index: 199;
   animation: fade-in 0.2s ease both;
 }

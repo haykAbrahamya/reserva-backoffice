@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Clock } from 'lucide-react'
 import { usePartner } from '@/store/app.store'
-import { Avatar, Button } from '@/components/ui'
+import { Avatar, Button, TimePicker } from '@/components/ui'
 import { partnersService } from '@/services/partners.service'
 import type { WeekSchedule, WorkingDay } from '@/types'
 import s from './Hours.module.scss'
@@ -151,20 +151,18 @@ export function Hours() {
                     <div key={key} className={[s.dayRow, !day.enabled ? s.disabled : ''].filter(Boolean).join(' ')}>
                       <span className={s.dayLabel}>{label}</span>
                       <div className={s.timeInputs}>
-                        <input
-                          type="time"
-                          className={s.timeInput}
+                        <TimePicker
                           value={day.start}
                           disabled={!day.enabled}
-                          onChange={e => updateDay(key, { start: e.target.value })}
+                          step={15}
+                          onChange={v => updateDay(key, { start: v })}
                         />
                         <span className={s.timeSep}>–</span>
-                        <input
-                          type="time"
-                          className={s.timeInput}
+                        <TimePicker
                           value={day.end}
                           disabled={!day.enabled}
-                          onChange={e => updateDay(key, { end: e.target.value })}
+                          step={15}
+                          onChange={v => updateDay(key, { end: v })}
                         />
                       </div>
                       <Toggle checked={day.enabled} onChange={v => updateDay(key, { enabled: v })} />

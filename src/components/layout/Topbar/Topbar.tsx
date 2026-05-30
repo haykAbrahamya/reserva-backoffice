@@ -2,6 +2,7 @@ import { useLocation } from 'react-router-dom'
 import { Bell } from 'lucide-react'
 import { Button } from '@/components/ui'
 import { UserMenu } from '../UserMenu/UserMenu'
+import { ThemeToggle } from '../ThemeToggle/ThemeToggle'
 import { usePartner } from '@/store/app.store'
 import { initials } from '@/components/ui'
 import s from './Topbar.module.scss'
@@ -33,6 +34,9 @@ export function Topbar() {
       <span className={s.breadcrumb}>{TITLES[pathname] ?? ''}</span>
 
       <div className={s.spacer} />
+
+      {/* Theme toggle */}
+      <ThemeToggle />
 
       {/* Bell notification */}
       <Button variant="default" size="sm" icon style={{ position: 'relative', flexShrink: 0 }}>
