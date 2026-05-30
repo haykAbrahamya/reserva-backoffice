@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { X } from 'lucide-react'
 import { useAppStore, usePartner } from '@/store/app.store'
 import { Button, Avatar, BookingBadge } from '@/components/ui'
@@ -7,6 +7,8 @@ import { bookingsService } from '@/services/bookings.service'
 import { fmtAMD, fmtDateTime, fmtDuration } from '@/utils/format'
 import type { BookingStatus } from '@/types'
 import s from './BookingDrawer.module.scss'
+
+const CLOSE_MS = 300
 
 const STATUS_ACTIONS: { status: BookingStatus; label: string }[] = [
   { status: 'confirmed', label: 'Confirm' },
@@ -27,12 +29,19 @@ export function BookingDrawer({ bookingId, onClose, sheet }: Props) {
   const booking       = useAppStore(st => st.bookings.find(b => b.id === bookingId))
   const upsertBooking = useAppStore(st => st.upsertBooking)
   const toast         = useToast()
+  const [closing, setClosing] = useState(false)
+
+  // Play the exit animation, then actually unmount via the parent's onClose.
+  const handleClose = useCallback(() => {
+    setClosing(true)
+    setTimeout(() => onClose(), CLOSE_MS)
+  }, [onClose])
 
   useEffect(() => {
-    const fn = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    const fn = (e: KeyboardEvent) => { if (e.key === 'Escape') handleClose() }
     document.addEventListener('keydown', fn)
     return () => document.removeEventListener('keydown', fn)
-  }, [onClose])
+  }, [handleClose])
 
   if (!booking || !partner) return null
 
@@ -109,8 +118,11 @@ export function BookingDrawer({ bookingId, onClose, sheet }: Props) {
   if (sheet) {
     return (
       <>
-        <div className={s.sheetScrim} onClick={onClose} />
-        <div className={s.sheet}>
+        <div
+          className={[s.sheetScrim, closing ? s.closing : ''].filter(Boolean).join(' ')}
+          onClick={handleClose}
+        />
+        <div className={[s.sheet, closing ? s.closing : ''].filter(Boolean).join(' ')}>
           <div className={s.grab} />
           <div className={s.sheetHead}>
             <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
@@ -121,7 +133,7 @@ export function BookingDrawer({ bookingId, onClose, sheet }: Props) {
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <BookingBadge status={booking.status} />
-                <Button variant="ghost" size="sm" icon onClick={onClose}><X size={14} /></Button>
+                <Button variant="ghost" size="sm" icon onClick={handleClose}><X size={14} /></Button>
               </div>
             </div>
           </div>
@@ -135,18 +147,10 @@ export function BookingDrawer({ bookingId, onClose, sheet }: Props) {
   return (
     <>
       <div
-        style={{ position: 'fixed', inset: 0, zIndex: 999, background: 'var(--scrim-soft)', backdropFilter: 'blur(2px)', animation: 'fade-in .18s ease both' }}
-        onClick={onClose}
+        className={[s.drawerScrim, closing ? s.closing : ''].filter(Boolean).join(' ')}
+        onClick={handleClose}
       />
-      <div style={{
-        position: 'fixed', top: 0, right: 0, bottom: 0, zIndex: 1000,
-        width: 'min(420px, 92vw)',
-        background: 'var(--bg-1)', borderLeft: '1px solid var(--line-1)',
-        boxShadow: 'var(--shadow-3)', display: 'flex', flexDirection: 'column',
-        animation: 'drawer-slide-in .34s cubic-bezier(.22,.86,.23,1) both',
-        willChange: 'transform',
-        overflow: 'hidden',
-      }}>
+      <div className={[s.drawer, closing ? s.closing : ''].filter(Boolean).join(' ')}>
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12, padding: '16px 22px', borderBottom: '1px solid var(--line-1)', flexShrink: 0 }}>
           <div>
             <div style={{ fontFamily: 'var(--font-serif)', fontSize: 22, letterSpacing: '-0.01em' }}>{booking.clientName}</div>
@@ -154,7 +158,7 @@ export function BookingDrawer({ bookingId, onClose, sheet }: Props) {
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <BookingBadge status={booking.status} />
-            <Button variant="ghost" size="sm" icon onClick={onClose}><X size={14} /></Button>
+            <Button variant="ghost" size="sm" icon onClick={handleClose}><X size={14} /></Button>
           </div>
         </div>
         <div style={{ flex: 1, overflowY: 'auto', padding: '0 22px 32px' }}>{inner}</div>

@@ -1,5 +1,15 @@
 @use '../../../styles/variables' as *;
 
+/* Dedicated keyframes (uniquely named, :global so they aren't hashed) */
+:global {
+  @keyframes bd-scrim-in   { from { opacity: 0 }                  to { opacity: 1 } }
+  @keyframes bd-scrim-out  { from { opacity: 1 }                  to { opacity: 0 } }
+  @keyframes bd-sheet-in   { from { transform: translateY(100%) } to { transform: translateY(0) } }
+  @keyframes bd-sheet-out  { from { transform: translateY(0) }    to { transform: translateY(100%) } }
+  @keyframes bd-drawer-in  { from { transform: translateX(100%) } to { transform: translateX(0) } }
+  @keyframes bd-drawer-out { from { transform: translateX(0) }    to { transform: translateX(100%) } }
+}
+
 .section {
   padding: 16px 0;
   border-bottom: 1px solid $line-1;
@@ -42,7 +52,9 @@
   display: flex;
   flex-direction: column;
   z-index: 200;
-  animation: sheet-up 0.38s cubic-bezier(0.22, 0.86, 0.23, 1) both;
+  will-change: transform;
+  animation: bd-sheet-in 0.36s cubic-bezier(0.22, 0.86, 0.23, 1) both;
+  &.closing { animation: bd-sheet-out 0.3s cubic-bezier(0.4, 0, 1, 1) both; }
 }
 
 .sheetScrim {
@@ -50,7 +62,38 @@
   inset: 0;
   background: var(--scrim);
   z-index: 199;
-  animation: fade-in 0.2s ease both;
+  animation: bd-scrim-in 0.22s ease both;
+  &.closing { animation: bd-scrim-out 0.26s ease both; }
+}
+
+/* Desktop side drawer */
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  width: min(420px, 92vw);
+  background: $bg-1;
+  border-left: 1px solid $line-1;
+  box-shadow: $shadow-3;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  will-change: transform;
+  animation: bd-drawer-in 0.34s cubic-bezier(0.22, 0.86, 0.23, 1) both;
+  &.closing { animation: bd-drawer-out 0.28s cubic-bezier(0.4, 0, 1, 1) both; }
+}
+
+.drawerScrim {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: var(--scrim-soft);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  animation: bd-scrim-in 0.2s ease both;
+  &.closing { animation: bd-scrim-out 0.24s ease both; }
 }
 
 .grab {
